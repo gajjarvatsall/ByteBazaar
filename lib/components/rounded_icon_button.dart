@@ -17,12 +17,13 @@ class RoundedIconButton extends StatelessWidget {
     return SizedBox(
       height: getProportionateScreenWidth(40),
       width: getProportionateScreenWidth(40),
-      child: FlatButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(50),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50),
+          ),
+          backgroundColor: Colors.white,
         ),
-        padding: EdgeInsets.zero,
-        color: Colors.white,
         onPressed: press,
         child: Icon(
           iconData,

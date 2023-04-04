@@ -39,8 +39,7 @@ class _BodyState extends State<Body> {
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
           child: Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: getProportionateScreenWidth(screenPadding)),
+            padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(screenPadding)),
             child: SizedBox(
               width: double.infinity,
               child: Column(
@@ -88,8 +87,7 @@ class _BodyState extends State<Body> {
                               itemBuilder: (context, index) {
                                 return buildAddressItemCard(addresses[index]);
                               });
-                        } else if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
+                        } else if (snapshot.connectionState == ConnectionState.waiting) {
                           return Center(
                             child: CircularProgressIndicator(),
                           );
@@ -122,8 +120,7 @@ class _BodyState extends State<Body> {
     return Future<void>.value();
   }
 
-  Future<bool> deleteButtonCallback(
-      BuildContext context, String addressId) async {
+  Future<bool> deleteButtonCallback(BuildContext context, String addressId) async {
     final confirmDeletion = await showDialog(
       context: context,
       builder: (context) {
@@ -131,13 +128,13 @@ class _BodyState extends State<Body> {
           title: Text("Confirmation"),
           content: Text("Are you sure you want to delete this Address ?"),
           actions: [
-            FlatButton(
+            ElevatedButton(
               child: Text("Yes"),
               onPressed: () {
                 Navigator.pop(context, true);
               },
             ),
-            FlatButton(
+            ElevatedButton(
               child: Text("No"),
               onPressed: () {
                 Navigator.pop(context, false);
@@ -152,8 +149,7 @@ class _BodyState extends State<Body> {
       bool status = false;
       String snackbarMessage;
       try {
-        status =
-            await UserDatabaseHelper().deleteAddressForCurrentUser(addressId);
+        status = await UserDatabaseHelper().deleteAddressForCurrentUser(addressId);
         if (status == true) {
           snackbarMessage = "Address deleted successfully";
         } else {
@@ -179,13 +175,9 @@ class _BodyState extends State<Body> {
     return false;
   }
 
-  Future<bool> editButtonCallback(
-      BuildContext context, String addressId) async {
+  Future<bool> editButtonCallback(BuildContext context, String addressId) async {
     await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                EditAddressScreen(addressIdToEdit: addressId)));
+        context, MaterialPageRoute(builder: (context) => EditAddressScreen(addressIdToEdit: addressId)));
     await refreshPage();
     return false;
   }

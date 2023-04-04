@@ -43,8 +43,7 @@ class _BodyState extends State<Body> {
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
           child: Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: getProportionateScreenWidth(screenPadding)),
+            padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(screenPadding)),
             child: SizedBox(
               width: double.infinity,
               child: Column(
@@ -92,14 +91,12 @@ class _BodyState extends State<Body> {
             itemCount: orderedProductsIds.length,
             itemBuilder: (context, index) {
               return FutureBuilder<OrderedProduct>(
-                future: UserDatabaseHelper()
-                    .getOrderedProductFromId(orderedProductsIds[index]),
+                future: UserDatabaseHelper().getOrderedProductFromId(orderedProductsIds[index]),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     final orderedProduct = snapshot.data;
                     return buildOrderedProductItem(orderedProduct);
-                  } else if (snapshot.connectionState ==
-                      ConnectionState.waiting) {
+                  } else if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
                     final error = snapshot.error.toString();
@@ -135,8 +132,7 @@ class _BodyState extends State<Body> {
 
   Widget buildOrderedProductItem(OrderedProduct orderedProduct) {
     return FutureBuilder<Product>(
-      future:
-          ProductDatabaseHelper().getProductWithID(orderedProduct.productUid),
+      future: ProductDatabaseHelper().getProductWithID(orderedProduct.productUid),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final product = snapshot.data;
@@ -216,14 +212,12 @@ class _BodyState extends State<Body> {
                       bottomRight: Radius.circular(16),
                     ),
                   ),
-                  child: FlatButton(
+                  child: ElevatedButton(
                     onPressed: () async {
-                      String currentUserUid =
-                          AuthentificationService().currentUser.uid;
+                      String currentUserUid = AuthentificationService().currentUser.uid;
                       Review prevReview;
                       try {
-                        prevReview = await ProductDatabaseHelper()
-                            .getProductReviewWithID(product.id, currentUserUid);
+                        prevReview = await ProductDatabaseHelper().getProductReviewWithID(product.id, currentUserUid);
                       } on FirebaseException catch (e) {
                         Logger().w("Firebase Exception: $e");
                       } catch (e) {
@@ -249,11 +243,9 @@ class _BodyState extends State<Body> {
                         bool reviewAdded = false;
                         String snackbarMessage;
                         try {
-                          reviewAdded = await ProductDatabaseHelper()
-                              .addProductReview(product.id, result);
+                          reviewAdded = await ProductDatabaseHelper().addProductReview(product.id, result);
                           if (reviewAdded == true) {
-                            snackbarMessage =
-                                "Product review added successfully";
+                            snackbarMessage = "Product review added successfully";
                           } else {
                             throw "Coulnd't add product review due to unknown reason";
                           }
