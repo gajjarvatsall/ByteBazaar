@@ -31,28 +31,43 @@ class _BodyState extends State<Body> {
   final productCategories = <Map>[
     <String, dynamic>{
       ICON_KEY: "assets/icons/Electronics.svg",
-      TITLE_KEY: "Electronics",
-      PRODUCT_TYPE_KEY: ProductType.Electronics,
+      TITLE_KEY: "Processors",
+      PRODUCT_TYPE_KEY: ProductType.processors,
     },
     <String, dynamic>{
       ICON_KEY: "assets/icons/Books.svg",
-      TITLE_KEY: "Books",
-      PRODUCT_TYPE_KEY: ProductType.Books,
+      TITLE_KEY: "Motherboards",
+      PRODUCT_TYPE_KEY: ProductType.motherBoards,
     },
     <String, dynamic>{
       ICON_KEY: "assets/icons/Fashion.svg",
-      TITLE_KEY: "Fashion",
-      PRODUCT_TYPE_KEY: ProductType.Fashion,
+      TITLE_KEY: "Graphics",
+      PRODUCT_TYPE_KEY: ProductType.graphicsCard,
     },
     <String, dynamic>{
       ICON_KEY: "assets/icons/Groceries.svg",
-      TITLE_KEY: "Groceries",
-      PRODUCT_TYPE_KEY: ProductType.Groceries,
+      TITLE_KEY: "Memory",
+      PRODUCT_TYPE_KEY: ProductType.ram,
     },
     <String, dynamic>{
       ICON_KEY: "assets/icons/Art.svg",
-      TITLE_KEY: "Art",
-      PRODUCT_TYPE_KEY: ProductType.Art,
+      TITLE_KEY: "Storage",
+      PRODUCT_TYPE_KEY: ProductType.storage,
+    },
+    <String, dynamic>{
+      ICON_KEY: "assets/icons/Electronics.svg",
+      TITLE_KEY: "Power Unit",
+      PRODUCT_TYPE_KEY: ProductType.powerUnit,
+    },
+    <String, dynamic>{
+      ICON_KEY: "assets/icons/Electronics.svg",
+      TITLE_KEY: "Case",
+      PRODUCT_TYPE_KEY: ProductType.pcCase,
+    },
+    <String, dynamic>{
+      ICON_KEY: "assets/icons/Electronics.svg",
+      TITLE_KEY: "CPU Cooler",
+      PRODUCT_TYPE_KEY: ProductType.cpuCooler,
     },
     <String, dynamic>{
       ICON_KEY: "assets/icons/Others.svg",
@@ -61,8 +76,7 @@ class _BodyState extends State<Body> {
     },
   ];
 
-  final FavouriteProductsStream favouriteProductsStream =
-      FavouriteProductsStream();
+  final FavouriteProductsStream favouriteProductsStream = FavouriteProductsStream();
   final AllProductsStream allProductsStream = AllProductsStream();
 
   @override
@@ -87,8 +101,7 @@ class _BodyState extends State<Body> {
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
           child: Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: getProportionateScreenWidth(screenPadding)),
+            padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(screenPadding)),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -100,8 +113,7 @@ class _BodyState extends State<Body> {
                     if (query.length <= 0) return;
                     List<String> searchedProductsId;
                     try {
-                      searchedProductsId = await ProductDatabaseHelper()
-                          .searchInProducts(query.toLowerCase());
+                      searchedProductsId = await ProductDatabaseHelper().searchInProducts(query.toLowerCase());
                       if (searchedProductsId != null) {
                         await Navigator.push(
                           context,
@@ -128,16 +140,13 @@ class _BodyState extends State<Body> {
                     }
                   },
                   onCartButtonPressed: () async {
-                    bool allowed =
-                        AuthentificationService().currentUserVerified;
+                    bool allowed = AuthentificationService().currentUserVerified;
                     if (!allowed) {
                       final reverify = await showConfirmationDialog(context,
                           "You haven't verified your email address. This action is only allowed for verified users.",
-                          positiveResponse: "Resend verification email",
-                          negativeResponse: "Go back");
+                          positiveResponse: "Resend verification email", negativeResponse: "Go back");
                       if (reverify) {
-                        final future = AuthentificationService()
-                            .sendVerificationEmailToCurrentUser();
+                        final future = AuthentificationService().sendVerificationEmailToCurrentUser();
                         await showDialog(
                           context: context,
                           builder: (context) {
@@ -178,10 +187,8 @@ class _BodyState extends State<Body> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        CategoryProductsScreen(
-                                      productType: productCategories[index]
-                                          [PRODUCT_TYPE_KEY],
+                                    builder: (context) => CategoryProductsScreen(
+                                      productType: productCategories[index][PRODUCT_TYPE_KEY],
                                     ),
                                   ),
                                 );
@@ -195,21 +202,21 @@ class _BodyState extends State<Body> {
                 ),
                 SizedBox(height: getProportionateScreenHeight(20)),
                 SizedBox(
-                  height: SizeConfig.screenHeight * 0.5,
+                  height: SizeConfig.screenHeight * 0.7,
                   child: ProductsSection(
-                    sectionTitle: "Products You Like",
-                    productsStreamController: favouriteProductsStream,
-                    emptyListMessage: "Add Product to Favourites",
+                    sectionTitle: "Explore All Products",
+                    productsStreamController: allProductsStream,
+                    emptyListMessage: "Looks like all Stores are closed",
                     onProductCardTapped: onProductCardTapped,
                   ),
                 ),
                 SizedBox(height: getProportionateScreenHeight(20)),
                 SizedBox(
-                  height: SizeConfig.screenHeight * 0.8,
+                  height: SizeConfig.screenHeight * 0.5,
                   child: ProductsSection(
-                    sectionTitle: "Explore All Products",
-                    productsStreamController: allProductsStream,
-                    emptyListMessage: "Looks like all Stores are closed",
+                    sectionTitle: "Products You Like",
+                    productsStreamController: favouriteProductsStream,
+                    emptyListMessage: "Add Product to Favourites",
                     onProductCardTapped: onProductCardTapped,
                   ),
                 ),

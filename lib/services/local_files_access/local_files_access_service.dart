@@ -11,7 +11,7 @@ Future<String> choseImageFromLocalFiles(
   int maxSizeInKB = 1024,
   int minSizeInKB = 5,
 }) async {
-  final PermissionStatus photoPermissionStatus = await Permission.photos.request();
+  final PermissionStatus photoPermissionStatus = await Permission.mediaLibrary.request();
   if (!photoPermissionStatus.isGranted) {
     throw LocalFileHandlingStorageReadPermissionDeniedException(
         message: "Permission required to read storage, please give permission");

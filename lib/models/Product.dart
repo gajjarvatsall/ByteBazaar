@@ -2,11 +2,15 @@ import 'package:e_commerce_app_flutter/models/Model.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 
 enum ProductType {
-  Electronics,
-  Books,
-  Fashion,
-  Groceries,
-  Art,
+  processors,
+  powerUnit,
+  pcCase,
+  cpuCooler,
+
+  motherBoards,
+  graphicsCard,
+  ram,
+  storage,
   Others,
 }
 
@@ -55,8 +59,7 @@ class Product extends Model {
   }) : super(id);
 
   int calculatePercentageDiscount() {
-    int discount =
-        (((originalPrice - discountPrice) * 100) / originalPrice).round();
+    int discount = (((originalPrice - discountPrice) * 100) / originalPrice).round();
     return discount;
   }
 
@@ -69,8 +72,7 @@ class Product extends Model {
       images: (map[IMAGES_KEY] ?? []).cast<String>(),
       title: map[TITLE_KEY],
       variant: map[VARIANT_KEY],
-      productType:
-          EnumToString.fromString(ProductType.values, map[PRODUCT_TYPE_KEY]),
+      productType: EnumToString.fromString(ProductType.values, map[PRODUCT_TYPE_KEY]),
       discountPrice: map[DISCOUNT_PRICE_KEY],
       originalPrice: map[ORIGINAL_PRICE_KEY],
       rating: map[RATING_KEY],
@@ -114,8 +116,7 @@ class Product extends Model {
     if (highlights != null) map[HIGHLIGHTS_KEY] = highlights;
     if (description != null) map[DESCRIPTION_KEY] = description;
     if (seller != null) map[SELLER_KEY] = seller;
-    if (productType != null)
-      map[PRODUCT_TYPE_KEY] = EnumToString.convertToString(productType);
+    if (productType != null) map[PRODUCT_TYPE_KEY] = EnumToString.convertToString(productType);
     if (owner != null) map[OWNER_KEY] = owner;
     if (searchTags != null) map[SEARCH_TAGS_KEY] = searchTags;
 

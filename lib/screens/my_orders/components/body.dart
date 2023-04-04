@@ -212,7 +212,7 @@ class _BodyState extends State<Body> {
                       bottomRight: Radius.circular(16),
                     ),
                   ),
-                  child: ElevatedButton(
+                  child: TextButton(
                     onPressed: () async {
                       String currentUserUid = AuthentificationService().currentUser.uid;
                       Review prevReview;

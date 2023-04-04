@@ -1,5 +1,6 @@
 import 'package:e_commerce_app_flutter/components/rounded_icon_button.dart';
 import 'package:e_commerce_app_flutter/components/search_field.dart';
+import 'package:e_commerce_app_flutter/constants.dart';
 import 'package:flutter/material.dart';
 
 import '../../../components/icon_button_with_counter.dart';
@@ -18,9 +19,10 @@ class HomeHeader extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        RoundedIconButton(
-            iconData: Icons.menu,
-            press: () {
+        IconButton(
+            icon: Icon(Icons.menu),
+            color: kTextColor,
+            onPressed: () {
               Scaffold.of(context).openDrawer();
             }),
         Expanded(

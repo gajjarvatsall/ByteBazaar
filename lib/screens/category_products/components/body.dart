@@ -23,8 +23,7 @@ class Body extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _BodyState createState() =>
-      _BodyState(categoryProductsStream: CategoryProductsStream(productType));
+  _BodyState createState() => _BodyState(categoryProductsStream: CategoryProductsStream(productType));
 }
 
 class _BodyState extends State<Body> {
@@ -52,8 +51,7 @@ class _BodyState extends State<Body> {
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
           child: Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: getProportionateScreenWidth(screenPadding)),
+            padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(screenPadding)),
             child: SizedBox(
               width: double.infinity,
               child: Column(
@@ -76,15 +74,13 @@ class _BodyState extends State<Body> {
                           if (productsId.length == 0) {
                             return Center(
                               child: NothingToShowContainer(
-                                secondaryMessage:
-                                    "No Products in ${EnumToString.convertToString(widget.productType)}",
+                                secondaryMessage: "No Products in ${EnumToString.convertToString(widget.productType)}",
                               ),
                             );
                           }
 
                           return buildProductsGrid(productsId);
-                        } else if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
+                        } else if (snapshot.connectionState == ConnectionState.waiting) {
                           return Center(
                             child: CircularProgressIndicator(),
                           );
@@ -131,8 +127,7 @@ class _BodyState extends State<Body> {
               List<String> searchedProductsId;
               try {
                 searchedProductsId = await ProductDatabaseHelper()
-                    .searchInProducts(query.toLowerCase(),
-                        productType: widget.productType);
+                    .searchInProducts(query.toLowerCase(), productType: widget.productType);
                 if (searchedProductsId != null) {
                   await Navigator.push(
                     context,
@@ -140,8 +135,7 @@ class _BodyState extends State<Body> {
                       builder: (context) => SearchResultScreen(
                         searchQuery: query,
                         searchResultProductsId: searchedProductsId,
-                        searchIn:
-                            EnumToString.convertToString(widget.productType),
+                        searchIn: EnumToString.convertToString(widget.productType),
                       ),
                     ),
                   );
@@ -253,15 +247,15 @@ class _BodyState extends State<Body> {
 
   String bannerFromProductType() {
     switch (widget.productType) {
-      case ProductType.Electronics:
+      case ProductType.processors:
         return "assets/images/electronics_banner.jpg";
-      case ProductType.Books:
+      case ProductType.motherBoards:
         return "assets/images/books_banner.jpg";
-      case ProductType.Fashion:
+      case ProductType.graphicsCard:
         return "assets/images/fashions_banner.jpg";
-      case ProductType.Groceries:
+      case ProductType.ram:
         return "assets/images/groceries_banner.jpg";
-      case ProductType.Art:
+      case ProductType.storage:
         return "assets/images/arts_banner.jpg";
       case ProductType.Others:
         return "assets/images/others_banner.jpg";

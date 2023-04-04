@@ -9,7 +9,11 @@ class App extends StatelessWidget {
     return MaterialApp(
         title: appName,
         debugShowCheckedModeBanner: false,
-        theme: theme(),
+        theme: theme().copyWith(
+          colorScheme: Theme.of(context).colorScheme.copyWith(
+                primary: const Color(0xFF29577E),
+              ),
+        ),
         home: AuthentificationWrapper()
         //home: AuthentificationWrapper(),
         );

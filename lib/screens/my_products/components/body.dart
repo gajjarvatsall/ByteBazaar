@@ -44,8 +44,7 @@ class _BodyState extends State<Body> {
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
           child: Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: getProportionateScreenWidth(screenPadding)),
+            padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(screenPadding)),
             child: SizedBox(
               width: double.infinity,
               child: Column(
@@ -67,8 +66,7 @@ class _BodyState extends State<Body> {
                           if (productsIds.length == 0) {
                             return Center(
                               child: NothingToShowContainer(
-                                secondaryMessage:
-                                    "Add your first Product to Sell",
+                                secondaryMessage: "Add your first Product to Sell",
                               ),
                             );
                           }
@@ -79,10 +77,9 @@ class _BodyState extends State<Body> {
                               return buildProductsCard(productsIds[index]);
                             },
                           );
-                        } else if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
+                        } else if (snapshot.connectionState == ConnectionState.waiting) {
                           return Center(
-                            child: CircularProgressIndicator(),
+                            child: Text(''),
                           );
                         } else if (snapshot.hasError) {
                           final error = snapshot.error;
@@ -165,21 +162,17 @@ class _BodyState extends State<Body> {
       ),
       confirmDismiss: (direction) async {
         if (direction == DismissDirection.startToEnd) {
-          final confirmation = await showConfirmationDialog(
-              context, "Are you sure to Delete Product?");
+          final confirmation = await showConfirmationDialog(context, "Are you sure to Delete Product?");
           if (confirmation) {
             for (int i = 0; i < product.images.length; i++) {
-              String path =
-                  ProductDatabaseHelper().getPathForProductImage(product.id, i);
-              final deletionFuture =
-                  FirestoreFilesAccess().deleteFileFromPath(path);
+              String path = ProductDatabaseHelper().getPathForProductImage(product.id, i);
+              final deletionFuture = FirestoreFilesAccess().deleteFileFromPath(path);
               await showDialog(
                 context: context,
                 builder: (context) {
                   return AsyncProgressDialog(
                     deletionFuture,
-                    message: Text(
-                        "Deleting Product Images ${i + 1}/${product.images.length}"),
+                    message: Text("Deleting Product Images ${i + 1}/${product.images.length}"),
                   );
                 },
               );
@@ -188,8 +181,7 @@ class _BodyState extends State<Body> {
             bool productInfoDeleted = false;
             String snackbarMessage;
             try {
-              final deleteProductFuture =
-                  ProductDatabaseHelper().deleteUserProduct(product.id);
+              final deleteProductFuture = ProductDatabaseHelper().deleteUserProduct(product.id);
               productInfoDeleted = await showDialog(
                 context: context,
                 builder: (context) {
@@ -222,8 +214,7 @@ class _BodyState extends State<Body> {
           await refreshPage();
           return confirmation;
         } else if (direction == DismissDirection.endToStart) {
-          final confirmation = await showConfirmationDialog(
-              context, "Are you sure to Edit Product?");
+          final confirmation = await showConfirmationDialog(context, "Are you sure to Edit Product?");
           if (confirmation) {
             await Navigator.push(
               context,

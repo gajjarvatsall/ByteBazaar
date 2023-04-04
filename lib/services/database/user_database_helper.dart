@@ -4,6 +4,7 @@ import 'package:e_commerce_app_flutter/models/CartItem.dart';
 import 'package:e_commerce_app_flutter/models/OrderedProduct.dart';
 import 'package:e_commerce_app_flutter/services/authentification/authentification_service.dart';
 import 'package:e_commerce_app_flutter/services/database/product_database_helper.dart';
+import 'package:flutter/material.dart';
 
 class UserDatabaseHelper {
   static const String USERS_COLLECTION_NAME = "users";
@@ -16,8 +17,7 @@ class UserDatabaseHelper {
   static const String FAV_PRODUCTS_KEY = "favourite_products";
 
   UserDatabaseHelper._privateConstructor();
-  static UserDatabaseHelper _instance =
-      UserDatabaseHelper._privateConstructor();
+  static UserDatabaseHelper _instance = UserDatabaseHelper._privateConstructor();
   factory UserDatabaseHelper() {
     return _instance;
   }
@@ -42,8 +42,7 @@ class UserDatabaseHelper {
     final docRef = firestore.collection(USERS_COLLECTION_NAME).doc(uid);
     final cartCollectionRef = docRef.collection(CART_COLLECTION_NAME);
     final addressCollectionRef = docRef.collection(ADDRESSES_COLLECTION_NAME);
-    final ordersCollectionRef =
-        docRef.collection(ORDERED_PRODUCTS_COLLECTION_NAME);
+    final ordersCollectionRef = docRef.collection(ORDERED_PRODUCTS_COLLECTION_NAME);
 
     final cartDocs = await cartCollectionRef.get();
     for (final cartDoc in cartDocs.docs) {
@@ -63,8 +62,7 @@ class UserDatabaseHelper {
 
   Future<bool> isProductFavourite(String productId) async {
     String uid = AuthentificationService().currentUser.uid;
-    final userDocSnapshot =
-        firestore.collection(USERS_COLLECTION_NAME).doc(uid);
+    final userDocSnapshot = firestore.collection(USERS_COLLECTION_NAME).doc(uid);
     final userDocData = (await userDocSnapshot.get()).data();
     final favList = userDocData[FAV_PRODUCTS_KEY].cast<String>();
     if (favList.contains(productId)) {
@@ -76,18 +74,15 @@ class UserDatabaseHelper {
 
   Future<List> get usersFavouriteProductsList async {
     String uid = AuthentificationService().currentUser.uid;
-    final userDocSnapshot =
-        firestore.collection(USERS_COLLECTION_NAME).doc(uid);
+    final userDocSnapshot = firestore.collection(USERS_COLLECTION_NAME).doc(uid);
     final userDocData = (await userDocSnapshot.get()).data();
     final favList = userDocData[FAV_PRODUCTS_KEY];
     return favList;
   }
 
-  Future<bool> switchProductFavouriteStatus(
-      String productId, bool newState) async {
+  Future<bool> switchProductFavouriteStatus(String productId, bool newState) async {
     String uid = AuthentificationService().currentUser.uid;
-    final userDocSnapshot =
-        firestore.collection(USERS_COLLECTION_NAME).doc(uid);
+    final userDocSnapshot = firestore.collection(USERS_COLLECTION_NAME).doc(uid);
 
     if (newState == true) {
       userDocSnapshot.update({
@@ -103,11 +98,8 @@ class UserDatabaseHelper {
 
   Future<List<String>> get addressesList async {
     String uid = AuthentificationService().currentUser.uid;
-    final snapshot = await firestore
-        .collection(USERS_COLLECTION_NAME)
-        .doc(uid)
-        .collection(ADDRESSES_COLLECTION_NAME)
-        .get();
+    final snapshot =
+        await firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(ADDRESSES_COLLECTION_NAME).get();
     final addresses = List<String>();
     snapshot.docs.forEach((doc) {
       addresses.add(doc.id);
@@ -118,54 +110,39 @@ class UserDatabaseHelper {
 
   Future<Address> getAddressFromId(String id) async {
     String uid = AuthentificationService().currentUser.uid;
-    final doc = await firestore
-        .collection(USERS_COLLECTION_NAME)
-        .doc(uid)
-        .collection(ADDRESSES_COLLECTION_NAME)
-        .doc(id)
-        .get();
+    final doc =
+        await firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(ADDRESSES_COLLECTION_NAME).doc(id).get();
     final address = Address.fromMap(doc.data(), id: doc.id);
     return address;
   }
 
   Future<bool> addAddressForCurrentUser(Address address) async {
     String uid = AuthentificationService().currentUser.uid;
-    final addressesCollectionReference = firestore
-        .collection(USERS_COLLECTION_NAME)
-        .doc(uid)
-        .collection(ADDRESSES_COLLECTION_NAME);
+    final addressesCollectionReference =
+        firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(ADDRESSES_COLLECTION_NAME);
     await addressesCollectionReference.add(address.toMap());
     return true;
   }
 
   Future<bool> deleteAddressForCurrentUser(String id) async {
     String uid = AuthentificationService().currentUser.uid;
-    final addressDocReference = firestore
-        .collection(USERS_COLLECTION_NAME)
-        .doc(uid)
-        .collection(ADDRESSES_COLLECTION_NAME)
-        .doc(id);
+    final addressDocReference =
+        firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(ADDRESSES_COLLECTION_NAME).doc(id);
     await addressDocReference.delete();
     return true;
   }
 
   Future<bool> updateAddressForCurrentUser(Address address) async {
     String uid = AuthentificationService().currentUser.uid;
-    final addressDocReference = firestore
-        .collection(USERS_COLLECTION_NAME)
-        .doc(uid)
-        .collection(ADDRESSES_COLLECTION_NAME)
-        .doc(address.id);
+    final addressDocReference =
+        firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(ADDRESSES_COLLECTION_NAME).doc(address.id);
     await addressDocReference.update(address.toMap());
     return true;
   }
 
   Future<CartItem> getCartItemFromId(String id) async {
     String uid = AuthentificationService().currentUser.uid;
-    final cartCollectionRef = firestore
-        .collection(USERS_COLLECTION_NAME)
-        .doc(uid)
-        .collection(CART_COLLECTION_NAME);
+    final cartCollectionRef = firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(CART_COLLECTION_NAME);
     final docRef = cartCollectionRef.doc(id);
     final docSnapshot = await docRef.get();
     final cartItem = CartItem.fromMap(docSnapshot.data(), id: docSnapshot.id);
@@ -174,10 +151,7 @@ class UserDatabaseHelper {
 
   Future<bool> addProductToCart(String productId) async {
     String uid = AuthentificationService().currentUser.uid;
-    final cartCollectionRef = firestore
-        .collection(USERS_COLLECTION_NAME)
-        .doc(uid)
-        .collection(CART_COLLECTION_NAME);
+    final cartCollectionRef = firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(CART_COLLECTION_NAME);
     final docRef = cartCollectionRef.doc(productId);
     final docSnapshot = await docRef.get();
     bool alreadyPresent = docSnapshot.exists;
@@ -191,11 +165,7 @@ class UserDatabaseHelper {
 
   Future<List<String>> emptyCart() async {
     String uid = AuthentificationService().currentUser.uid;
-    final cartItems = await firestore
-        .collection(USERS_COLLECTION_NAME)
-        .doc(uid)
-        .collection(CART_COLLECTION_NAME)
-        .get();
+    final cartItems = await firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(CART_COLLECTION_NAME).get();
     List orderedProductsUid = List<String>();
     for (final doc in cartItems.docs) {
       orderedProductsUid.add(doc.id);
@@ -206,11 +176,7 @@ class UserDatabaseHelper {
 
   Future<num> get cartTotal async {
     String uid = AuthentificationService().currentUser.uid;
-    final cartItems = await firestore
-        .collection(USERS_COLLECTION_NAME)
-        .doc(uid)
-        .collection(CART_COLLECTION_NAME)
-        .get();
+    final cartItems = await firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(CART_COLLECTION_NAME).get();
     num total = 0.0;
     for (final doc in cartItems.docs) {
       num itemsCount = doc.data()[CartItem.ITEM_COUNT_KEY];
@@ -222,20 +188,15 @@ class UserDatabaseHelper {
 
   Future<bool> removeProductFromCart(String cartItemID) async {
     String uid = AuthentificationService().currentUser.uid;
-    final cartCollectionReference = firestore
-        .collection(USERS_COLLECTION_NAME)
-        .doc(uid)
-        .collection(CART_COLLECTION_NAME);
+    final cartCollectionReference =
+        firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(CART_COLLECTION_NAME);
     await cartCollectionReference.doc(cartItemID).delete();
     return true;
   }
 
   Future<bool> increaseCartItemCount(String cartItemID) async {
     String uid = AuthentificationService().currentUser.uid;
-    final cartCollectionRef = firestore
-        .collection(USERS_COLLECTION_NAME)
-        .doc(uid)
-        .collection(CART_COLLECTION_NAME);
+    final cartCollectionRef = firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(CART_COLLECTION_NAME);
     final docRef = cartCollectionRef.doc(cartItemID);
     docRef.update({CartItem.ITEM_COUNT_KEY: FieldValue.increment(1)});
     return true;
@@ -243,10 +204,7 @@ class UserDatabaseHelper {
 
   Future<bool> decreaseCartItemCount(String cartItemID) async {
     String uid = AuthentificationService().currentUser.uid;
-    final cartCollectionRef = firestore
-        .collection(USERS_COLLECTION_NAME)
-        .doc(uid)
-        .collection(CART_COLLECTION_NAME);
+    final cartCollectionRef = firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(CART_COLLECTION_NAME);
     final docRef = cartCollectionRef.doc(cartItemID);
     final docSnapshot = await docRef.get();
     int currentCount = docSnapshot.data()[CartItem.ITEM_COUNT_KEY];
@@ -260,11 +218,8 @@ class UserDatabaseHelper {
 
   Future<List<String>> get allCartItemsList async {
     String uid = AuthentificationService().currentUser.uid;
-    final querySnapshot = await firestore
-        .collection(USERS_COLLECTION_NAME)
-        .doc(uid)
-        .collection(CART_COLLECTION_NAME)
-        .get();
+    final querySnapshot =
+        await firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(CART_COLLECTION_NAME).get();
     List itemsId = List<String>();
     for (final item in querySnapshot.docs) {
       itemsId.add(item.id);
@@ -274,11 +229,8 @@ class UserDatabaseHelper {
 
   Future<List<String>> get orderedProductsList async {
     String uid = AuthentificationService().currentUser.uid;
-    final orderedProductsSnapshot = await firestore
-        .collection(USERS_COLLECTION_NAME)
-        .doc(uid)
-        .collection(ORDERED_PRODUCTS_COLLECTION_NAME)
-        .get();
+    final orderedProductsSnapshot =
+        await firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(ORDERED_PRODUCTS_COLLECTION_NAME).get();
     List orderedProductsId = List<String>();
     for (final doc in orderedProductsSnapshot.docs) {
       orderedProductsId.add(doc.id);
@@ -288,10 +240,8 @@ class UserDatabaseHelper {
 
   Future<bool> addToMyOrders(List<OrderedProduct> orders) async {
     String uid = AuthentificationService().currentUser.uid;
-    final orderedProductsCollectionRef = firestore
-        .collection(USERS_COLLECTION_NAME)
-        .doc(uid)
-        .collection(ORDERED_PRODUCTS_COLLECTION_NAME);
+    final orderedProductsCollectionRef =
+        firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(ORDERED_PRODUCTS_COLLECTION_NAME);
     for (final order in orders) {
       await orderedProductsCollectionRef.add(order.toMap());
     }
@@ -312,30 +262,25 @@ class UserDatabaseHelper {
 
   Stream<DocumentSnapshot> get currentUserDataStream {
     String uid = AuthentificationService().currentUser.uid;
-    return firestore
-        .collection(USERS_COLLECTION_NAME)
-        .doc(uid)
-        .get()
-        .asStream();
+    return firestore.collection(USERS_COLLECTION_NAME).doc(uid).get().asStream();
   }
 
   Future<bool> updatePhoneForCurrentUser(String phone) async {
     String uid = AuthentificationService().currentUser.uid;
-    final userDocSnapshot =
-        firestore.collection(USERS_COLLECTION_NAME).doc(uid);
+    final userDocSnapshot = firestore.collection(USERS_COLLECTION_NAME).doc(uid);
     await userDocSnapshot.update({PHONE_KEY: phone});
     return true;
   }
 
   String getPathForCurrentUserDisplayPicture() {
     final String currentUserUid = AuthentificationService().currentUser.uid;
-    return "user/display_picture/$currentUserUid";
+    debugPrint('current user id -- $currentUserUid');
+    return "$USERS_COLLECTION_NAME/$DP_KEY/$currentUserUid";
   }
 
   Future<bool> uploadDisplayPictureForCurrentUser(String url) async {
     String uid = AuthentificationService().currentUser.uid;
-    final userDocSnapshot =
-        firestore.collection(USERS_COLLECTION_NAME).doc(uid);
+    final userDocSnapshot = firestore.collection(USERS_COLLECTION_NAME).doc(uid);
     await userDocSnapshot.update(
       {DP_KEY: url},
     );
@@ -344,8 +289,7 @@ class UserDatabaseHelper {
 
   Future<bool> removeDisplayPictureForCurrentUser() async {
     String uid = AuthentificationService().currentUser.uid;
-    final userDocSnapshot =
-        firestore.collection(USERS_COLLECTION_NAME).doc(uid);
+    final userDocSnapshot = firestore.collection(USERS_COLLECTION_NAME).doc(uid);
     await userDocSnapshot.update(
       {
         DP_KEY: FieldValue.delete(),
@@ -356,8 +300,7 @@ class UserDatabaseHelper {
 
   Future<String> get displayPictureForCurrentUser async {
     String uid = AuthentificationService().currentUser.uid;
-    final userDocSnapshot =
-        await firestore.collection(USERS_COLLECTION_NAME).doc(uid).get();
+    final userDocSnapshot = await firestore.collection(USERS_COLLECTION_NAME).doc(uid).get();
     return userDocSnapshot.data()[DP_KEY];
   }
 }
