@@ -28,7 +28,7 @@ class ReviewBox extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              review.feedback,
+              review.feedback ?? '',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 14,

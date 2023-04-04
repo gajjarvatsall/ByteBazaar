@@ -1,6 +1,5 @@
 import 'package:e_commerce_app_flutter/components/async_progress_dialog.dart';
 import 'package:e_commerce_app_flutter/constants.dart';
-import 'package:e_commerce_app_flutter/screens/about_developer/about_developer_screen.dart';
 import 'package:e_commerce_app_flutter/screens/change_display_picture/change_display_picture_screen.dart';
 import 'package:e_commerce_app_flutter/screens/change_email/change_email_screen.dart';
 import 'package:e_commerce_app_flutter/screens/change_password/change_password_screen.dart';
@@ -35,8 +34,7 @@ class HomeScreenDrawer extends StatelessWidget {
                 if (snapshot.hasData) {
                   final user = snapshot.data;
                   return buildUserAccountsHeader(user);
-                } else if (snapshot.connectionState ==
-                    ConnectionState.waiting) {
+                } else if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
@@ -56,13 +54,11 @@ class HomeScreenDrawer extends StatelessWidget {
             onTap: () async {
               bool allowed = AuthentificationService().currentUserVerified;
               if (!allowed) {
-                final reverify = await showConfirmationDialog(context,
-                    "You haven't verified your email address. This action is only allowed for verified users.",
-                    positiveResponse: "Resend verification email",
-                    negativeResponse: "Go back");
+                final reverify = await showConfirmationDialog(
+                    context, "You haven't verified your email address. This action is only allowed for verified users.",
+                    positiveResponse: "Resend verification email", negativeResponse: "Go back");
                 if (reverify) {
-                  final future = AuthentificationService()
-                      .sendVerificationEmailToCurrentUser();
+                  final future = AuthentificationService().sendVerificationEmailToCurrentUser();
                   await showDialog(
                     context: context,
                     builder: (context) {
@@ -92,13 +88,11 @@ class HomeScreenDrawer extends StatelessWidget {
             onTap: () async {
               bool allowed = AuthentificationService().currentUserVerified;
               if (!allowed) {
-                final reverify = await showConfirmationDialog(context,
-                    "You haven't verified your email address. This action is only allowed for verified users.",
-                    positiveResponse: "Resend verification email",
-                    negativeResponse: "Go back");
+                final reverify = await showConfirmationDialog(
+                    context, "You haven't verified your email address. This action is only allowed for verified users.",
+                    positiveResponse: "Resend verification email", negativeResponse: "Go back");
                 if (reverify) {
-                  final future = AuthentificationService()
-                      .sendVerificationEmailToCurrentUser();
+                  final future = AuthentificationService().sendVerificationEmailToCurrentUser();
                   await showDialog(
                     context: context,
                     builder: (context) {
@@ -121,29 +115,13 @@ class HomeScreenDrawer extends StatelessWidget {
           ),
           buildSellerExpansionTile(context),
           ListTile(
-            leading: Icon(Icons.info),
-            title: Text(
-              "About Developer",
-              style: TextStyle(fontSize: 16, color: Colors.black),
-            ),
-            onTap: () async {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AboutDeveloperScreen(),
-                ),
-              );
-            },
-          ),
-          ListTile(
             leading: Icon(Icons.logout),
             title: Text(
               "Sign out",
               style: TextStyle(fontSize: 16, color: Colors.black),
             ),
             onTap: () async {
-              final confirmation =
-                  await showConfirmationDialog(context, "Confirm Sign out ?");
+              final confirmation = await showConfirmationDialog(context, "Confirm Sign out ?");
               if (confirmation) AuthentificationService().signOut();
             },
           ),
@@ -307,13 +285,11 @@ class HomeScreenDrawer extends StatelessWidget {
           onTap: () async {
             bool allowed = AuthentificationService().currentUserVerified;
             if (!allowed) {
-              final reverify = await showConfirmationDialog(context,
-                  "You haven't verified your email address. This action is only allowed for verified users.",
-                  positiveResponse: "Resend verification email",
-                  negativeResponse: "Go back");
+              final reverify = await showConfirmationDialog(
+                  context, "You haven't verified your email address. This action is only allowed for verified users.",
+                  positiveResponse: "Resend verification email", negativeResponse: "Go back");
               if (reverify) {
-                final future = AuthentificationService()
-                    .sendVerificationEmailToCurrentUser();
+                final future = AuthentificationService().sendVerificationEmailToCurrentUser();
                 await showDialog(
                   context: context,
                   builder: (context) {
@@ -326,8 +302,7 @@ class HomeScreenDrawer extends StatelessWidget {
               }
               return;
             }
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => EditProductScreen()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => EditProductScreen()));
           },
         ),
         ListTile(
@@ -341,13 +316,11 @@ class HomeScreenDrawer extends StatelessWidget {
           onTap: () async {
             bool allowed = AuthentificationService().currentUserVerified;
             if (!allowed) {
-              final reverify = await showConfirmationDialog(context,
-                  "You haven't verified your email address. This action is only allowed for verified users.",
-                  positiveResponse: "Resend verification email",
-                  negativeResponse: "Go back");
+              final reverify = await showConfirmationDialog(
+                  context, "You haven't verified your email address. This action is only allowed for verified users.",
+                  positiveResponse: "Resend verification email", negativeResponse: "Go back");
               if (reverify) {
-                final future = AuthentificationService()
-                    .sendVerificationEmailToCurrentUser();
+                final future = AuthentificationService().sendVerificationEmailToCurrentUser();
                 await showDialog(
                   context: context,
                   builder: (context) {

@@ -19,15 +19,18 @@ class RoundedIconButton extends StatelessWidget {
       width: getProportionateScreenWidth(40),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
+          alignment: Alignment.center,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50),
           ),
           backgroundColor: Colors.white,
         ),
         onPressed: press,
-        child: Icon(
-          iconData,
-          color: kTextColor,
+        child: Center(
+          child: Icon(
+            iconData,
+            color: kTextColor,
+          ),
         ),
       ),
     );
