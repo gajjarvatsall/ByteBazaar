@@ -1,4 +1,5 @@
 import 'package:e_commerce_app_flutter/components/async_progress_dialog.dart';
+import 'package:e_commerce_app_flutter/constants.dart';
 import 'package:e_commerce_app_flutter/services/authentification/authentification_service.dart';
 import 'package:e_commerce_app_flutter/services/database/user_database_helper.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -19,16 +20,16 @@ class AddToCartFAB extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
+      backgroundColor: kPrimaryColor,
+      splashColor: kPrimaryColor,
       onPressed: () async {
         bool allowed = AuthentificationService().currentUserVerified;
         if (!allowed) {
-          final reverify = await showConfirmationDialog(context,
-              "You haven't verified your email address. This action is only allowed for verified users.",
-              positiveResponse: "Resend verification email",
-              negativeResponse: "Go back");
+          final reverify = await showConfirmationDialog(
+              context, "You haven't verified your email address. This action is only allowed for verified users.",
+              positiveResponse: "Resend verification email", negativeResponse: "Go back");
           if (reverify) {
-            final future =
-                AuthentificationService().sendVerificationEmailToCurrentUser();
+            final future = AuthentificationService().sendVerificationEmailToCurrentUser();
             await showDialog(
               context: context,
               builder: (context) {
@@ -44,12 +45,11 @@ class AddToCartFAB extends StatelessWidget {
         bool addedSuccessfully = false;
         String snackbarMessage;
         try {
-          addedSuccessfully =
-              await UserDatabaseHelper().addProductToCart(productId);
+          addedSuccessfully = await UserDatabaseHelper().addProductToCart(productId);
           if (addedSuccessfully == true) {
             snackbarMessage = "Product added successfully";
           } else {
-            throw "Coulnd't add product due to unknown reason";
+            throw "Couldn't add product due to unknown reason";
           }
         } on FirebaseException catch (e) {
           Logger().w("Firebase Exception: $e");

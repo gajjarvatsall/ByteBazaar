@@ -30,47 +30,47 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   final productCategories = <Map>[
     <String, dynamic>{
-      ICON_KEY: "assets/icons/Electronics.svg",
-      TITLE_KEY: "Processors",
-      PRODUCT_TYPE_KEY: ProductType.processors,
-    },
-    <String, dynamic>{
-      ICON_KEY: "assets/icons/Books.svg",
+      ICON_KEY: "assets/icons/motherboard.svg",
       TITLE_KEY: "Motherboards",
       PRODUCT_TYPE_KEY: ProductType.motherBoards,
     },
     <String, dynamic>{
-      ICON_KEY: "assets/icons/Fashion.svg",
+      ICON_KEY: "assets/icons/graphics.svg",
       TITLE_KEY: "Graphics",
       PRODUCT_TYPE_KEY: ProductType.graphicsCard,
     },
     <String, dynamic>{
-      ICON_KEY: "assets/icons/Groceries.svg",
+      ICON_KEY: "assets/icons/memory.svg",
       TITLE_KEY: "Memory",
       PRODUCT_TYPE_KEY: ProductType.ram,
     },
     <String, dynamic>{
-      ICON_KEY: "assets/icons/Art.svg",
+      ICON_KEY: "assets/icons/storage.svg",
       TITLE_KEY: "Storage",
       PRODUCT_TYPE_KEY: ProductType.storage,
     },
     <String, dynamic>{
-      ICON_KEY: "assets/icons/Electronics.svg",
+      ICON_KEY: "assets/icons/processor.svg",
+      TITLE_KEY: "Processors",
+      PRODUCT_TYPE_KEY: ProductType.processors,
+    },
+    <String, dynamic>{
+      ICON_KEY: "assets/icons/powerunit.svg",
       TITLE_KEY: "Power Unit",
       PRODUCT_TYPE_KEY: ProductType.powerUnit,
     },
     <String, dynamic>{
-      ICON_KEY: "assets/icons/Electronics.svg",
+      ICON_KEY: "assets/icons/case.svg",
       TITLE_KEY: "Case",
       PRODUCT_TYPE_KEY: ProductType.pcCase,
     },
     <String, dynamic>{
-      ICON_KEY: "assets/icons/Electronics.svg",
+      ICON_KEY: "assets/icons/cooler.svg",
       TITLE_KEY: "CPU Cooler",
       PRODUCT_TYPE_KEY: ProductType.cpuCooler,
     },
     <String, dynamic>{
-      ICON_KEY: "assets/icons/Others.svg",
+      ICON_KEY: "assets/icons/others.svg",
       TITLE_KEY: "Others",
       PRODUCT_TYPE_KEY: ProductType.Others,
     },
