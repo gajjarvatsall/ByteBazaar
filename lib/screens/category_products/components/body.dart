@@ -1,6 +1,5 @@
 import 'package:e_commerce_app_flutter/components/nothingtoshow_container.dart';
 import 'package:e_commerce_app_flutter/components/product_card.dart';
-import 'package:e_commerce_app_flutter/components/rounded_icon_button.dart';
 import 'package:e_commerce_app_flutter/components/search_field.dart';
 import 'package:e_commerce_app_flutter/constants.dart';
 import 'package:e_commerce_app_flutter/models/Product.dart';
@@ -112,13 +111,14 @@ class _BodyState extends State<Body> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        RoundedIconButton(
-          iconData: Icons.arrow_back_ios,
-          press: () {
+        IconButton(
+          color: kTextColor,
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
             Navigator.pop(context);
           },
         ),
-        SizedBox(width: 5),
+        SizedBox(width: 3),
         Expanded(
           child: SearchField(
             onSubmit: (value) async {
