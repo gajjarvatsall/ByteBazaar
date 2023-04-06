@@ -14,7 +14,9 @@ class UserDatabaseHelper {
 
   static const String PHONE_KEY = 'phone';
   static const String DP_KEY = "display_picture";
+  static const String DN_KEY = "display_name";
   static const String FAV_PRODUCTS_KEY = "favourite_products";
+  static const String IS_SELECTED = "isSelected";
 
   UserDatabaseHelper._privateConstructor();
   static UserDatabaseHelper _instance = UserDatabaseHelper._privateConstructor();
@@ -29,12 +31,18 @@ class UserDatabaseHelper {
     return _firebaseFirestore;
   }
 
-  Future<void> createNewUser(String uid) async {
-    await firestore.collection(USERS_COLLECTION_NAME).doc(uid).set({
-      DP_KEY: null,
-      PHONE_KEY: null,
-      FAV_PRODUCTS_KEY: List<String>(),
-    });
+  Future<void> createNewUser(String uid, String isSelectedValue) async {
+    await firestore
+        .collection(USERS_COLLECTION_NAME)
+        .doc(uid)
+        .set({DP_KEY: null, PHONE_KEY: null, FAV_PRODUCTS_KEY: List<String>(), IS_SELECTED: isSelectedValue});
+  }
+
+  Future<void> createNewUserWithGoogle(String uid, String dpKey, String isSelectedValue) async {
+    await firestore
+        .collection(USERS_COLLECTION_NAME)
+        .doc(uid)
+        .set({DP_KEY: dpKey, PHONE_KEY: null, FAV_PRODUCTS_KEY: List<String>(), IS_SELECTED: isSelectedValue});
   }
 
   Future<void> deleteCurrentUserData() async {

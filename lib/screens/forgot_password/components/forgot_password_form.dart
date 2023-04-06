@@ -41,7 +41,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
             press: sendVerificationEmailButtonCallback,
           ),
           SizedBox(height: SizeConfig.screenHeight * 0.1),
-          NoAccountText(),
+          NoAccountText(''),
           SizedBox(height: getProportionateScreenHeight(30)),
         ],
       ),
@@ -79,8 +79,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
       bool resultStatus;
       String snackbarMessage;
       try {
-        final resultFuture =
-            AuthentificationService().resetPasswordForEmail(emailInput);
+        final resultFuture = AuthentificationService().resetPasswordForEmail(emailInput);
         resultFuture.then((value) => resultStatus = value);
         resultStatus = await showDialog(
           context: context,
@@ -95,8 +94,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
           snackbarMessage = "Password Reset Link sent to your email";
         } else {
           throw FirebaseCredentialActionAuthUnknownReasonFailureException(
-              message:
-                  "Sorry, could not process your request now, try again later");
+              message: "Sorry, could not process your request now, try again later");
         }
       } on MessagedFirebaseAuthException catch (e) {
         snackbarMessage = e.message;

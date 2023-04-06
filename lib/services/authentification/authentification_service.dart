@@ -8,32 +8,31 @@ import 'package:e_commerce_app_flutter/exceptions/firebaseauth/signup_exceptions
 import 'package:e_commerce_app_flutter/services/database/user_database_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthentificationService {
   static const String USER_NOT_FOUND_EXCEPTION_CODE = "user-not-found";
   static const String WRONG_PASSWORD_EXCEPTION_CODE = "wrong-password";
   static const String TOO_MANY_REQUESTS_EXCEPTION_CODE = 'too-many-requests';
-  static const String EMAIL_ALREADY_IN_USE_EXCEPTION_CODE =
-      "email-already-in-use";
-  static const String OPERATION_NOT_ALLOWED_EXCEPTION_CODE =
-      "operation-not-allowed";
+  static const String EMAIL_ALREADY_IN_USE_EXCEPTION_CODE = "email-already-in-use";
+  static const String OPERATION_NOT_ALLOWED_EXCEPTION_CODE = "operation-not-allowed";
   static const String WEAK_PASSWORD_EXCEPTION_CODE = "weak-password";
   static const String USER_MISMATCH_EXCEPTION_CODE = "user-mismatch";
   static const String INVALID_CREDENTIALS_EXCEPTION_CODE = "invalid-credential";
   static const String INVALID_EMAIL_EXCEPTION_CODE = "invalid-email";
   static const String USER_DISABLED_EXCEPTION_CODE = "user-disabled";
-  static const String INVALID_VERIFICATION_CODE_EXCEPTION_CODE =
-      "invalid-verification-code";
-  static const String INVALID_VERIFICATION_ID_EXCEPTION_CODE =
-      "invalid-verification-id";
-  static const String REQUIRES_RECENT_LOGIN_EXCEPTION_CODE =
-      "requires-recent-login";
+  static const String INVALID_VERIFICATION_CODE_EXCEPTION_CODE = "invalid-verification-code";
+  static const String INVALID_VERIFICATION_ID_EXCEPTION_CODE = "invalid-verification-id";
+  static const String REQUIRES_RECENT_LOGIN_EXCEPTION_CODE = "requires-recent-login";
+  static final auth = FirebaseAuth.instance;
+  static final googleSignIn = GoogleSignIn();
 
   FirebaseAuth _firebaseAuth;
 
   AuthentificationService._privateConstructor();
-  static AuthentificationService _instance =
-      AuthentificationService._privateConstructor();
+  static AuthentificationService _instance = AuthentificationService._privateConstructor();
+  UserDatabaseHelper userDatabaseHelper = UserDatabaseHelper();
 
   FirebaseAuth get firebaseAuth {
     if (_firebaseAuth == null) {
@@ -50,6 +49,42 @@ class AuthentificationService {
 
   Stream<User> get userChanges => firebaseAuth.userChanges();
 
+  Future<bool> googleAuthUser(context, String isSelectedValue) async {
+    /// Pass is selected value here in function arg
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const Center(
+          child: CircularProgressIndicator(
+            color: Colors.white,
+          ),
+        );
+      },
+    );
+    bool result = false;
+    try {
+      final googleAccount = await googleSignIn.signIn();
+      final googleAuth = await googleAccount?.authentication;
+      final credential =
+          GoogleAuthProvider.credential(idToken: googleAuth?.idToken, accessToken: googleAuth?.accessToken);
+      UserCredential userCredential = await auth.signInWithCredential(credential);
+      User user = userCredential.user;
+
+      if (user != null) {
+        if (userCredential.additionalUserInfo.isNewUser) {
+          await userDatabaseHelper.createNewUserWithGoogle(user.uid, user.photoURL, isSelectedValue);
+        }
+        result = true;
+      }
+      Navigator.of(context).pop();
+      return result;
+      Navigator.of(context).pop();
+    } catch (e) {
+      print(e);
+    }
+    return result;
+  }
+
   Future<void> deleteUserAccount() async {
     await currentUser.delete();
     await signOut();
@@ -58,10 +93,8 @@ class AuthentificationService {
   Future<bool> reauthCurrentUser(password) async {
     try {
       UserCredential userCredential =
-          await firebaseAuth.signInWithEmailAndPassword(
-              email: currentUser.email, password: password);
-      userCredential = await currentUser
-          .reauthenticateWithCredential(userCredential.credential);
+          await firebaseAuth.signInWithEmailAndPassword(email: currentUser.email, password: password);
+      userCredential = await currentUser.reauthenticateWithCredential(userCredential.credential);
     } on FirebaseAuthException catch (e) {
       if (e.code == WRONG_PASSWORD_EXCEPTION_CODE) {
         throw FirebaseSignInAuthWrongPasswordException();
@@ -76,8 +109,8 @@ class AuthentificationService {
 
   Future<bool> signIn({String email, String password}) async {
     try {
-      final UserCredential userCredential = await firebaseAuth
-          .signInWithEmailAndPassword(email: email, password: password);
+      final UserCredential userCredential =
+          await firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
       if (userCredential.user.emailVerified) {
         return true;
       } else {
@@ -111,15 +144,15 @@ class AuthentificationService {
     }
   }
 
-  Future<bool> signUp({String email, String password}) async {
+  Future<bool> signUp({String email, String password, String isSelectedValue}) async {
     try {
-      final UserCredential userCredential = await firebaseAuth
-          .createUserWithEmailAndPassword(email: email, password: password);
+      final UserCredential userCredential =
+          await firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
       final String uid = userCredential.user.uid;
       if (userCredential.user.emailVerified == false) {
         await userCredential.user.sendEmailVerification();
       }
-      await UserDatabaseHelper().createNewUser(uid);
+      await UserDatabaseHelper().createNewUser(uid, isSelectedValue);
       return true;
     } on MessagedFirebaseAuthException {
       rethrow;
@@ -143,6 +176,8 @@ class AuthentificationService {
 
   Future<void> signOut() async {
     await firebaseAuth.signOut();
+    await googleSignIn.signOut();
+    await FirebaseAuth.instance.signOut();
   }
 
   bool get currentUserVerified {
@@ -179,13 +214,11 @@ class AuthentificationService {
     }
   }
 
-  Future<bool> changePasswordForCurrentUser(
-      {String oldPassword, @required String newPassword}) async {
+  Future<bool> changePasswordForCurrentUser({String oldPassword, @required String newPassword}) async {
     try {
       bool isOldPasswordProvidedCorrect = true;
       if (oldPassword != null) {
-        isOldPasswordProvidedCorrect =
-            await verifyCurrentUserPassword(oldPassword);
+        isOldPasswordProvidedCorrect = await verifyCurrentUserPassword(oldPassword);
       }
       if (isOldPasswordProvidedCorrect) {
         await firebaseAuth.currentUser.updatePassword(newPassword);
@@ -210,8 +243,7 @@ class AuthentificationService {
     }
   }
 
-  Future<bool> changeEmailForCurrentUser(
-      {String password, String newEmail}) async {
+  Future<bool> changeEmailForCurrentUser({String password, String newEmail}) async {
     try {
       bool isPasswordProvidedCorrect = true;
       if (password != null) {
@@ -240,8 +272,7 @@ class AuthentificationService {
         password: password,
       );
 
-      final authCredentials =
-          await currentUser.reauthenticateWithCredential(authCredential);
+      final authCredentials = await currentUser.reauthenticateWithCredential(authCredential);
       return authCredentials != null;
     } on MessagedFirebaseAuthException {
       rethrow;

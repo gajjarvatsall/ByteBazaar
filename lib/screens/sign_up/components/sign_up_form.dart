@@ -12,16 +12,20 @@ import 'package:logger/logger.dart';
 import '../../../constants.dart';
 
 class SignUpForm extends StatefulWidget {
+  String isSelected;
   @override
   _SignUpFormState createState() => _SignUpFormState();
+  SignUpForm(
+    this.isSelected, {
+    Key key,
+  }) : super(key: key);
 }
 
 class _SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailFieldController = TextEditingController();
   final TextEditingController passwordFieldController = TextEditingController();
-  final TextEditingController confirmPasswordFieldController =
-      TextEditingController();
+  final TextEditingController confirmPasswordFieldController = TextEditingController();
 
   @override
   void dispose() {
@@ -36,8 +40,7 @@ class _SignUpFormState extends State<SignUpForm> {
     return Form(
       key: _formKey,
       child: Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: getProportionateScreenWidth(screenPadding)),
+        padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(screenPadding)),
         child: Column(
           children: [
             buildEmailFormField(),
@@ -71,8 +74,7 @@ class _SignUpFormState extends State<SignUpForm> {
       validator: (value) {
         if (confirmPasswordFieldController.text.isEmpty) {
           return kPassNullError;
-        } else if (confirmPasswordFieldController.text !=
-            passwordFieldController.text) {
+        } else if (confirmPasswordFieldController.text != passwordFieldController.text) {
           return kMatchPassError;
         } else if (confirmPasswordFieldController.text.length < 8) {
           return kShortPassError;
@@ -139,9 +141,9 @@ class _SignUpFormState extends State<SignUpForm> {
       String snackbarMessage;
       try {
         final signUpFuture = authService.signUp(
-          email: emailFieldController.text,
-          password: passwordFieldController.text,
-        );
+            email: emailFieldController.text,
+            password: passwordFieldController.text,
+            isSelectedValue: widget.isSelected);
         signUpFuture.then((value) => signUpStatus = value);
         signUpStatus = await showDialog(
           context: context,
@@ -153,8 +155,7 @@ class _SignUpFormState extends State<SignUpForm> {
           },
         );
         if (signUpStatus == true) {
-          snackbarMessage =
-              "Registered successfully, Please verify your email id";
+          snackbarMessage = "Registered successfully, Please verify your email id";
         } else {
           throw FirebaseSignUpAuthUnknownReasonFailureException();
         }
