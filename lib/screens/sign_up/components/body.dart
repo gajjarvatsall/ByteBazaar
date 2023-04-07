@@ -1,9 +1,21 @@
+import 'dart:developer';
+
 import 'package:e_commerce_app_flutter/constants.dart';
 import 'package:e_commerce_app_flutter/screens/sign_up/components/sign_up_form.dart';
 import 'package:e_commerce_app_flutter/size_config.dart';
 import 'package:flutter/material.dart';
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
+  String isSelected;
+  @override
+  State<Body> createState() => _BodyState();
+  Body(
+    this.isSelected, {
+    Key key,
+  }) : super(key: key);
+}
+
+class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -23,7 +35,7 @@ class Body extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: SizeConfig.screenHeight * 0.07),
-              SignUpForm(),
+              SignUpForm(widget.isSelected),
               SizedBox(height: getProportionateScreenHeight(20)),
               Text(
                 "By continuing your confirm that you agree \nwith our Terms and Conditions",

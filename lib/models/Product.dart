@@ -6,6 +6,7 @@ enum ProductType {
   powerUnit,
   pcCase,
   cpuCooler,
+  customPc,
 
   motherBoards,
   graphicsCard,

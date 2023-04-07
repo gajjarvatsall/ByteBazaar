@@ -3,11 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:e_commerce_app_flutter/size_config.dart';
 import 'package:e_commerce_app_flutter/constants.dart';
 
-class NoAccountText extends StatelessWidget {
-  const NoAccountText({
+class NoAccountText extends StatefulWidget {
+  String isSelected;
+  NoAccountText(
+    this.isSelected, {
     Key key,
   }) : super(key: key);
 
+  @override
+  State<NoAccountText> createState() => _NoAccountTextState();
+}
+
+class _NoAccountTextState extends State<NoAccountText> {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -21,8 +28,8 @@ class NoAccountText extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => SignUpScreen()));
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => SignUpScreen(isSelected: widget.isSelected)));
           },
           child: Text(
             "Sign Up",

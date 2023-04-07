@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce_app_flutter/components/async_progress_dialog.dart';
 import 'package:e_commerce_app_flutter/constants.dart';
 import 'package:e_commerce_app_flutter/screens/change_display_picture/change_display_picture_screen.dart';
@@ -8,12 +9,13 @@ import 'package:e_commerce_app_flutter/screens/edit_product/edit_product_screen.
 import 'package:e_commerce_app_flutter/screens/manage_addresses/manage_addresses_screen.dart';
 import 'package:e_commerce_app_flutter/screens/my_orders/my_orders_screen.dart';
 import 'package:e_commerce_app_flutter/screens/my_products/my_products_screen.dart';
+import 'package:e_commerce_app_flutter/screens/sign_in/sign_in_screen.dart';
 import 'package:e_commerce_app_flutter/services/authentification/authentification_service.dart';
 import 'package:e_commerce_app_flutter/services/database/user_database_helper.dart';
 import 'package:e_commerce_app_flutter/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:future_progress_dialog/future_progress_dialog.dart';
+import 'package:flutter/rendering.dart';
 import 'package:logger/logger.dart';
 import '../../change_display_name/change_display_name_screen.dart';
 
@@ -113,7 +115,20 @@ class HomeScreenDrawer extends StatelessWidget {
               );
             },
           ),
-          buildSellerExpansionTile(context),
+          StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+
+              /// Pass auth user doc id
+              stream: FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(AuthentificationService().currentUser.uid)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                return snapshot.hasData
+                    ? snapshot.data['isSelected'] == 'Seller'
+                        ? buildSellerExpansionTile(context)
+                        : Container()
+                    : Container();
+              }),
           ListTile(
             leading: Icon(Icons.logout),
             title: Text(
@@ -122,7 +137,11 @@ class HomeScreenDrawer extends StatelessWidget {
             ),
             onTap: () async {
               final confirmation = await showConfirmationDialog(context, "Confirm Sign out ?");
-              if (confirmation) AuthentificationService().signOut();
+              if (confirmation) {
+                AuthentificationService().signOut();
+                Navigator.pushAndRemoveUntil(
+                    context, MaterialPageRoute(builder: (context) => SignInScreen()), (route) => false);
+              }
             },
           ),
         ],
