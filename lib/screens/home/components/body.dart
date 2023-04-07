@@ -55,19 +55,24 @@ class _BodyState extends State<Body> {
       PRODUCT_TYPE_KEY: ProductType.processors,
     },
     <String, dynamic>{
+      ICON_KEY: "assets/icons/case.svg",
+      TITLE_KEY: "Custom Pc",
+      PRODUCT_TYPE_KEY: ProductType.customPc,
+    },
+    <String, dynamic>{
       ICON_KEY: "assets/icons/powerunit.svg",
       TITLE_KEY: "Power Unit",
       PRODUCT_TYPE_KEY: ProductType.powerUnit,
     },
     <String, dynamic>{
-      ICON_KEY: "assets/icons/case.svg",
-      TITLE_KEY: "Case",
-      PRODUCT_TYPE_KEY: ProductType.pcCase,
-    },
-    <String, dynamic>{
       ICON_KEY: "assets/icons/cooler.svg",
       TITLE_KEY: "CPU Cooler",
       PRODUCT_TYPE_KEY: ProductType.cpuCooler,
+    },
+    <String, dynamic>{
+      ICON_KEY: "assets/icons/case.svg",
+      TITLE_KEY: "Case",
+      PRODUCT_TYPE_KEY: ProductType.pcCase,
     },
     <String, dynamic>{
       ICON_KEY: "assets/icons/others.svg",

@@ -15,6 +15,7 @@ import 'package:e_commerce_app_flutter/services/database/user_database_helper.da
 import 'package:e_commerce_app_flutter/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:logger/logger.dart';
 import '../../change_display_name/change_display_name_screen.dart';
 
@@ -114,14 +115,20 @@ class HomeScreenDrawer extends StatelessWidget {
               );
             },
           ),
-          // StreamBuilder(
-          //   stream: FirebaseFirestore.instance.collection('users').snapshots(),
-          //     builder: (context,snapshot){
-          //     QuerySnapshot<Map<String,dynamic>> documentSnapshot;
-          //     documentSnapshot = snapshot.data
-          //     if()
-          // }),
-          buildSellerExpansionTile(context),
+          StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+
+              /// Pass auth user doc id
+              stream: FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(AuthentificationService().currentUser.uid)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                return snapshot.hasData
+                    ? snapshot.data['isSelected'] == 'Seller'
+                        ? buildSellerExpansionTile(context)
+                        : Container()
+                    : Container();
+              }),
           ListTile(
             leading: Icon(Icons.logout),
             title: Text(
